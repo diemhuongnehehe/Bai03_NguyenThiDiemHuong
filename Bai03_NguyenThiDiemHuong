@@ -1,0 +1,106 @@
+from ._anvil_designer import Form2Template
+from anvil import *
+import anvil.tables as tables
+import anvil.tables.query as q
+from anvil.tables import app_tables
+import anvil.server
+
+
+class Form2(Form2Template):
+   def __init__(self, **properties):
+          self.init_components(**properties)
+        
+        # Đặt các tùy chọn cho dropdown với cặp giá trị hiển thị và giá trị thực tế
+         
+        # Đăng ký sự kiện khi thay đổi dropdown
+          self.DropdowncuaHuong.set_event_handler("change", self.DropdowncuaHuong_change)
+        # Đăng ký sự kiện khi nút sắp xếp được kích hoạt
+          self.btn.set_event_handler("click", self.btn_click)
+   def btn_click(self, **event_args):
+    # Lấy giá trị thực tế của thuật toán đã chọn từ dropdown
+              selected_algorithm = self.DropdowncuaHuong.selected_value
+        
+        # Lấy dãy số nguyên từ ô văn bản
+              number_name = self.txt_nhapso.text
+              numbers = [int(x.strip()) for x in  number_name.split()]
+
+        # Xử lý logic tương ứng với giá trị thực tế
+              if selected_algorithm == "Insertion Sort":
+                self.insertion_sort(numbers)
+              elif selected_algorithm == "Selection Sort":
+                self.selection_sort(numbers)
+              elif selected_algorithm == "Bubble Sort":
+                self.bubble_sort(numbers)
+              elif selected_algorithm == "Merge Sort":
+                self.merge_sort(numbers)
+   def DropdowncuaHuong_change(self, **event_args):
+        # Lấy giá trị thực tế của thuật toán đã chọn từ dropdown
+            selected_algorithm = self.DropdowncuaHuong.selected_value
+        # Hiển thị thông báo hoặc thực hiện các hành động cần thiết dựa trên giá trị đã chọn
+            if selected_algorithm == "Insertion Sort":
+              self.lab.text = "Thuật toán sắp xếp: Insertion Sort"
+            elif selected_algorithm == "Selection Sort":
+              self.lab.text = "Thuật toán sắp xếp: Selection Sort"
+            elif selected_algorithm == "Bubble Sort":
+              self.lab.text = "Thuật toán sắp xếp: Bubble Sort"
+            elif selected_algorithm == "Merge Sort":
+              self.lab.text = "Thuật toán sắp xếp: Merge Sort"
+   def insertion_sort(self, arr):
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+    self.lab.text = "Dãy số sau khi sắp xếp: " + ", ".join(map(str, arr))
+
+def selection_sort(self, arr):
+    n = len(arr)
+    for i in range(n - 1):
+        min_idx = i
+        for j in range(i + 1, n):
+            if arr[j] < arr[min_idx]:
+                min_idx = j
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+    self.lab.text = "Dãy số sau khi sắp xếp: " + ", ".join(map(str, arr))
+
+def bubble_sort(self, arr):
+    n = len(arr)
+    for i in range(n - 1):
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    self.lab.text = "Dãy số sau khi sắp xếp: " + ", ".join(map(str, arr))
+
+def merge_sort(self, arr):
+    if len(arr) > 1:
+        mid = len(arr) // 2
+        L = arr[:mid]
+        R = arr[mid:]
+
+        self.merge_sort(L)
+        self.merge_sort(R)
+
+        i = j = k = 0
+
+        while i < len(L) and j < len(R):
+            if L[i] < R[j]:
+                arr[k] = L[i]
+                i += 1
+            else:
+                arr[k] = R[j]
+                j += 1
+            k += 1
+
+        while i < len(L):
+            arr[k] = L[i]
+            i += 1
+            k += 1
+
+        while j < len(R):
+            arr[k] = R[j]
+            j += 1
+            k += 1
+
+    self.lab.text = "Dãy số sau khi sắp xếp: " + ", ".join(map(str, arr))
